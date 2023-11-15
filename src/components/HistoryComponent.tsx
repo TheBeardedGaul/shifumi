@@ -1,6 +1,6 @@
 import React from "react";
-import Game from "../models/interfaces/Game";
 import GameItemComponent from "./GameItemComponent";
+import Game from "../engine/Game";
 
 interface HistoryComponentProps {
   history: Game[];

@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
-import Game from "../models/interfaces/Game";
+import Game from "../engine/Game";
 
 interface GameItemComponentProps {
   game: Game;

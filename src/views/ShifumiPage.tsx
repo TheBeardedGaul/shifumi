@@ -5,53 +5,9 @@ import RulesComponent from "../components/RulesComponent";
 import ScoringComponent from "../components/ScoringComponent";
 import Choice from "../models/enums/Choice";
 import Result from "../models/enums/Result";
-import Game from "../models/interfaces/Game";
 import ChoicesComponent from "../components/ChoicesComponent";
 import HistoryComponent from "../components/HistoryComponent";
-
-function getResult(playerChoice: Choice, botChoice: Choice): Game {
-  let result = Result.DRAW;
-  if (playerChoice === Choice.PIERRE) {
-    switch (botChoice) {
-      case Choice.PIERRE:
-        result = Result.DRAW;
-        break;
-      case Choice.FEUILLE:
-        result = Result.LOSE;
-        break;
-      case Choice.CISEAUX:
-        result = Result.WIN;
-        break;
-    }
-  }
-  if (playerChoice === Choice.FEUILLE) {
-    switch (botChoice) {
-      case Choice.PIERRE:
-        result = Result.WIN;
-        break;
-      case Choice.FEUILLE:
-        result = Result.DRAW;
-        break;
-      case Choice.CISEAUX:
-        result = Result.LOSE;
-        break;
-    }
-  }
-  if (playerChoice === Choice.CISEAUX) {
-    switch (botChoice) {
-      case Choice.PIERRE:
-        result = Result.LOSE;
-        break;
-      case Choice.FEUILLE:
-        result = Result.WIN;
-        break;
-      case Choice.CISEAUX:
-        result = Result.DRAW;
-        break;
-    }
-  }
-  return { playerChoice, botChoice, result };
-}
+import Game from "../engine/Game";
 
 function ShifumiPage() {
   const [currentChoice, setCurrentChoice] = React.useState<
@@ -64,19 +20,19 @@ function ShifumiPage() {
   const [userScoring, setUserScoring] = React.useState<number>(0);
   const [botScoring, setBotScoring] = React.useState<number>(0);
 
-  function computeResult(userChoice: Choice, botChoice: Choice) {
-    const result = getResult(userChoice as Choice, botChoice as Choice);
+  function computeResult(userChoice: Choice) {
+    const game = new Game(userChoice);
     const newHistory = history;
-    newHistory.push(result);
-    if (result.result === Result.WIN) {
+    newHistory.push(game);
+    if (game.result === Result.WIN) {
       setUserScoring(userScoring + 1);
     }
-    if (result.result === Result.LOSE) {
+    if (game.result === Result.LOSE) {
       setBotScoring(botScoring + 1);
     }
     setHistory(newHistory);
-    setCurrentBotChoice(botChoice);
-    setCurrentChoice(userChoice);
+    setCurrentBotChoice(game.botChoice);
+    setCurrentChoice(game.playerChoice);
   }
 
   return (
@@ -85,12 +41,8 @@ function ShifumiPage() {
       <ScoringComponent botScoring={botScoring} userScoring={userScoring} />
       <ChoicesComponent computeResult={computeResult} />
       <Stack spacing={2} direction="row">
-        <Typography variant="h5">
-          Choix actuel du joueur : {currentChoice}
-        </Typography>
-        <Typography variant="h5">
-          Choix actuel de l'ordinateur : {currentBotChoice}
-        </Typography>
+        <Typography variant="h5">Joueur : {currentChoice}</Typography>
+        <Typography variant="h5">Ordinateur : {currentBotChoice}</Typography>
       </Stack>
       <HistoryComponent history={history} />
     </>
