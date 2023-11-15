@@ -7,6 +7,7 @@ import Choice from "../models/enums/Choice";
 import Result from "../models/enums/Result";
 import Game from "../models/interfaces/Game";
 import ChoicesComponent from "../components/ChoicesComponent";
+import HistoryComponent from "../components/HistoryComponent";
 
 function getResult(playerChoice: Choice, botChoice: Choice): Game {
   let result = Result.DRAW;
@@ -91,15 +92,7 @@ function ShifumiPage() {
           Choix actuel de l'ordinateur : {currentBotChoice}
         </Typography>
       </Stack>
-      {history.map((game, index) => {
-        return (
-          <Stack spacing={2} direction="row">
-            <Typography key={index} variant="h5">
-              {game.playerChoice} - {game.botChoice} : {game.result}
-            </Typography>
-          </Stack>
-        );
-      })}
+      <HistoryComponent history={history} />
     </>
   );
 }
