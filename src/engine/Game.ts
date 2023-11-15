@@ -40,47 +40,18 @@ class Game {
   }
 
   private computeResult(playerChoice: Choice, botChoice: Choice): Result {
-    let result = Result.DRAW;
-    if (playerChoice === Choice.PIERRE) {
-      switch (botChoice) {
-        case Choice.PIERRE:
-          result = Result.DRAW;
-          break;
-        case Choice.FEUILLE:
-          result = Result.LOSE;
-          break;
-        case Choice.CISEAUX:
-          result = Result.WIN;
-          break;
-      }
+    if (playerChoice === botChoice) {
+      return Result.DRAW;
     }
-    if (playerChoice === Choice.FEUILLE) {
-      switch (botChoice) {
-        case Choice.PIERRE:
-          result = Result.WIN;
-          break;
-        case Choice.FEUILLE:
-          result = Result.DRAW;
-          break;
-        case Choice.CISEAUX:
-          result = Result.LOSE;
-          break;
-      }
+    if (
+      (playerChoice === Choice.PIERRE && botChoice === Choice.CISEAUX) ||
+      (playerChoice === Choice.FEUILLE && botChoice === Choice.PIERRE) ||
+      (playerChoice === Choice.CISEAUX && botChoice === Choice.FEUILLE)
+    ) {
+      return Result.WIN;
     }
-    if (playerChoice === Choice.CISEAUX) {
-      switch (botChoice) {
-        case Choice.PIERRE:
-          result = Result.LOSE;
-          break;
-        case Choice.FEUILLE:
-          result = Result.WIN;
-          break;
-        case Choice.CISEAUX:
-          result = Result.DRAW;
-          break;
-      }
-    }
-    return result;
+
+    return Result.LOSE;
   }
 }
 
