@@ -1,26 +1,12 @@
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import React from "react";
 import RulesComponent from "../components/RulesComponent";
 import ScoringComponent from "../components/ScoringComponent";
-
-interface Game {
-  playerChoice: Choice;
-  botChoice: Choice;
-  result: Result;
-}
-
-enum Choice {
-  PIERRE = "pierre",
-  FEUILLE = "feuille",
-  CISEAUX = "ciseaux",
-}
-
-enum Result {
-  WIN = "win",
-  LOSE = "lose",
-  DRAW = "draw",
-}
+import Choice from "../models/enums/Choice";
+import Result from "../models/enums/Result";
+import Game from "../models/interfaces/Game";
+import ChoicesComponent from "../components/ChoicesComponent";
 
 function getResult(playerChoice: Choice, botChoice: Choice): Game {
   let result = Result.DRAW;
@@ -66,15 +52,6 @@ function getResult(playerChoice: Choice, botChoice: Choice): Game {
   return { playerChoice, botChoice, result };
 }
 
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
-
-const botChoice = (): Choice => {
-  const choices = ["pierre", "feuille", "ciseaux"];
-  return choices[getRandomInt(3)] as Choice;
-};
-
 function ShifumiPage() {
   const [currentChoice, setCurrentChoice] = React.useState<
     Choice | undefined
@@ -105,26 +82,7 @@ function ShifumiPage() {
     <>
       <RulesComponent />
       <ScoringComponent botScoring={botScoring} userScoring={userScoring} />
-      <Stack spacing={2} direction="row">
-        <Button
-          variant="contained"
-          onClick={() => computeResult(Choice.PIERRE, botChoice())}
-        >
-          Pierre
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => computeResult(Choice.FEUILLE, botChoice())}
-        >
-          Feuille
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => computeResult(Choice.CISEAUX, botChoice())}
-        >
-          Ciseaux
-        </Button>
-      </Stack>
+      <ChoicesComponent computeResult={computeResult} />
       <Stack spacing={2} direction="row">
         <Typography variant="h5">
           Choix actuel du joueur : {currentChoice}
