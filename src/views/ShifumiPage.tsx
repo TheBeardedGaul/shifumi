@@ -10,12 +10,6 @@ import HistoryComponent from "../components/HistoryComponent";
 import Game from "../engine/Game";
 
 function ShifumiPage() {
-  const [currentChoice, setCurrentChoice] = React.useState<
-    Choice | undefined
-  >();
-  const [currentBotChoice, setCurrentBotChoice] = React.useState<
-    Choice | undefined
-  >();
   const [history, setHistory] = React.useState<Game[]>([]);
   const [userScoring, setUserScoring] = React.useState<number>(0);
   const [botScoring, setBotScoring] = React.useState<number>(0);
@@ -31,8 +25,11 @@ function ShifumiPage() {
       setBotScoring(botScoring + 1);
     }
     setHistory(newHistory);
-    setCurrentBotChoice(game.botChoice);
-    setCurrentChoice(game.playerChoice);
+  }
+
+  let lastGame;
+  if (history.length > 0) {
+    lastGame = history[history.length - 1];
   }
 
   return (
@@ -41,8 +38,8 @@ function ShifumiPage() {
       <ScoringComponent botScoring={botScoring} userScoring={userScoring} />
       <ChoicesComponent computeResult={computeResult} />
       <Stack spacing={2} direction="row">
-        <Typography variant="h5">Joueur : {currentChoice}</Typography>
-        <Typography variant="h5">Ordinateur : {currentBotChoice}</Typography>
+        <Typography variant="h5">Joueur : {lastGame?.playerChoice}</Typography>
+        <Typography variant="h5">Ordinateur : {lastGame?.botChoice}</Typography>
       </Stack>
       <HistoryComponent history={history} />
     </>
