@@ -1,15 +1,19 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
+import Game from "../engine/Game";
+import Result from "../models/enums/Result";
 
 interface ScoringComponentProps {
-  botScoring: number;
-  userScoring: number;
+  history: Game[];
 }
 
-const ScoringComponent: React.FC<ScoringComponentProps> = ({
-  botScoring,
-  userScoring,
-}) => {
+const ScoringComponent: React.FC<ScoringComponentProps> = ({ history }) => {
+  const userScoring = history.filter(
+    (element) => element.result === Result.WIN
+  ).length;
+  const botScoring = history.filter(
+    (element) => element.result === Result.LOSE
+  ).length;
   return (
     <>
       <Stack spacing={2} direction="row">
